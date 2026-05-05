@@ -1,0 +1,198 @@
+/* RESET */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f5f5f5;
+}
+
+/* 🌍 MAP FIX */
+.leaflet-container {
+  height: 100vh;
+  width: 100%;
+  z-index: 0;
+}
+
+/* 🚀 BOTTOM SHEET */
+.bottom-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+
+  border-radius: 20px 20px 0 0;
+  padding: 18px;
+  z-index: 1000;
+
+  box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.15);
+
+  animation: slideUp 0.4s ease;
+}
+
+/* ✨ SLIDE ANIMATION */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 🧠 STATUS TEXT */
+.status-text {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 🎯 HEADINGS */
+h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+/* 🚑 DRIVER CARD */
+.driver-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px;
+  margin-bottom: 10px;
+
+  border-radius: 14px;
+  background: white;
+  border: 1px solid #eee;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+/* HOVER EFFECT */
+.driver-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background: #fafafa;
+}
+
+/* CLICK EFFECT */
+.driver-card:active {
+  transform: scale(0.98);
+}
+
+/* 🧍 DRIVER NAME */
+.driver-card strong {
+  font-size: 16px;
+}
+
+/* ⭐ RATING */
+.driver-card span {
+  font-size: 14px;
+  color: #888;
+}
+
+/* ⏱ ETA TEXT */
+.driver-card div:last-child {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* 🔘 PRIMARY BUTTON */
+.primary-btn {
+  width: 100%;
+  padding: 14px;
+
+  background: linear-gradient(135deg, #000, #222);
+  color: white;
+
+  border: none;
+  border-radius: 14px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+/* BUTTON HOVER */
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* BUTTON CLICK */
+.primary-btn:active {
+  transform: scale(0.97);
+}
+
+/* ⏳ LOADING STATE */
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ✨ FADE IN */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+  .bottom-sheet {
+    padding: 14px;
+  }
+
+  .driver-card {
+    padding: 12px;
+  }
+
+  .primary-btn {
+    padding: 12px;
+  }
+}
+/* 📱 APP CONTAINER (centered like mobile app) */
+.app-container {
+  max-width: 420px;
+  height: 95vh;
+  margin: 10px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #f5f5f5;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* 🗺 MAP WRAPPER */
+.map-wrapper {
+  height: 60%;
+  border-bottom: 1px solid #eee;
+}
+
+/* MAP */
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+/* HANDLE */
+.handle {
+  width: 40px;
+  height: 5px;
+  background: #ccc;
+  border-radius: 10px;
+  margin: 0 auto 10px;
+}
