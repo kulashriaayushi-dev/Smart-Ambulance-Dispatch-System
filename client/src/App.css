@@ -196,3 +196,37 @@ h3 {
   border-radius: 10px;
   margin: 0 auto 10px;
 }
+.role-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+}
+
+.role-cards {
+  display: flex;
+  gap: 20px;
+}
+
+.role-card {
+  background: white;
+  color: black;
+  padding: 30px;
+  border-radius: 16px;
+  cursor: pointer;
+  width: 220px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.role-card:hover {
+  transform: scale(1.05);
+}

@@ -29,6 +29,7 @@ const baseDrivers = [
 ];
 
 export default function App() {
+  const [role, setRole] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [driversList, setDriversList] = useState([]);
   const [selectedDriver, setSelectedDriver] = useState(null);
@@ -37,7 +38,7 @@ export default function App() {
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 📍 Get real location
+  // 📍 Get user location
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -46,13 +47,11 @@ export default function App() {
           pos.coords.longitude,
         ]);
       },
-      () => {
-        alert("Please allow location access");
-      }
+      () => alert("Please allow location access")
     );
   }, []);
 
-  // 🚨 Get route from OSRM
+  // 🚨 Get route
   const getRoute = async (start, end) => {
     const url = `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`;
 
@@ -66,7 +65,7 @@ export default function App() {
     };
   };
 
-  // 🚑 Animate movement
+  // 🚑 Move ambulance
   const moveAlongRoute = (route) => {
     let i = 0;
 
@@ -82,7 +81,7 @@ export default function App() {
     }, 200);
   };
 
-  // 📍 Generate nearby drivers
+  // 📍 Generate drivers
   const generateDrivers = () => {
     return baseDrivers.map((d) => ({
       ...d,
@@ -93,7 +92,7 @@ export default function App() {
     }));
   };
 
-  // 🚀 Request ambulances
+  // 🚀 Request ambulance
   const requestAmbulance = async () => {
     if (!userLocation) return;
 
@@ -130,99 +129,129 @@ export default function App() {
     moveAlongRoute(driver.route);
   };
 
-  // ⏳ Wait for location
+  // ⏳ Loading state
   if (!userLocation) {
     return <h2 style={{ padding: 20 }}>Getting your location...</h2>;
   }
 
- return (
-  <div className="app-container">
-    
-    {/* MAP CARD */}
-    <div className="map-wrapper">
-      <MapContainer
-        center={userLocation}
-        zoom={14}
-        className="map"
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+  // 🚀 ROLE SELECTION SCREEN
+  if (!role) {
+    return (
+      <div className="role-container">
+        <h1 className="app-title">🚑 Smart Ambulance</h1>
 
-        <Marker position={userLocation}>
-          <Popup>You are here</Popup>
-        </Marker>
-
-        {driversList.map((d) => (
-          <Marker key={d.id} position={d.position}>
-            <Popup>🚑 {d.driver}</Popup>
-          </Marker>
-        ))}
-
-        {ambulancePos && (
-          <Marker position={ambulancePos}>
-            <Popup>🚑 On the way</Popup>
-          </Marker>
-        )}
-
-        {routePath.length > 0 && (
-          <Polyline positions={routePath} color="blue" />
-        )}
-      </MapContainer>
-    </div>
-
-    {/* BOTTOM UI */}
-    <div className="bottom-sheet">
-      
-      <div className="handle" />
-
-      <div className="status-text">{status}</div>
-
-      {!driversList.length && (
-        <button className="primary-btn" onClick={requestAmbulance}>
-          {loading ? "Finding ambulances..." : "Request Ambulance"}
-        </button>
-      )}
-
-      {driversList.length > 0 && !selectedDriver && (
-        <>
-          <h3>Select Ambulance</h3>
-
-          {driversList.map((d) => (
-            <div
-              key={d.id}
-              className="driver-card"
-              onClick={() => selectDriver(d)}
-            >
-              <div>
-                <strong>🚑 {d.driver}</strong><br />
-                ⭐ {d.rating}
-              </div>
-              <div>⏱ {d.eta} min</div>
-            </div>
-          ))}
-        </>
-      )}
-
-      {selectedDriver && (
-        <>
-          <h3>🚑 On the way</h3>
-
-          <div className="driver-card">
-            <div>
-              <strong>{selectedDriver.driver}</strong><br />
-              ⭐ {selectedDriver.rating}
-            </div>
-            <div>⏱ {selectedDriver.eta} min</div>
+        <div className="role-cards">
+          <div
+            className="role-card"
+            onClick={() => setRole("patient")}
+          >
+            <h2>Need Ambulance</h2>
+            <p>Request emergency help instantly</p>
           </div>
 
-          <button
-            className="primary-btn"
-            onClick={() => window.location.reload()}
+          <div
+            className="role-card"
+            onClick={() => setRole("driver")}
           >
-            Cancel Request
+            <h2>I'm a Driver</h2>
+            <p>Accept and respond to requests</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 🚑 DRIVER SCREEN (placeholder)
+  if (role === "driver") {
+    return (
+      <div className="role-container">
+        <h2>Driver Dashboard (Coming Soon)</h2>
+      </div>
+    );
+  }
+
+  // 🚑 PATIENT UI
+  return (
+    <div className="app-container">
+      {/* MAP */}
+      <div className="map-wrapper">
+        <MapContainer center={userLocation} zoom={14} className="map">
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+          <Marker position={userLocation}>
+            <Popup>You are here</Popup>
+          </Marker>
+
+          {driversList.map((d) => (
+            <Marker key={d.id} position={d.position}>
+              <Popup>🚑 {d.driver}</Popup>
+            </Marker>
+          ))}
+
+          {ambulancePos && (
+            <Marker position={ambulancePos}>
+              <Popup>🚑 On the way</Popup>
+            </Marker>
+          )}
+
+          {routePath.length > 0 && (
+            <Polyline positions={routePath} color="blue" />
+          )}
+        </MapContainer>
+      </div>
+
+      {/* UI */}
+      <div className="bottom-sheet">
+        <div className="handle" />
+        <div className="status-text">{status}</div>
+
+        {!driversList.length && (
+          <button className="primary-btn" onClick={requestAmbulance}>
+            {loading ? "Finding ambulances..." : "Request Ambulance"}
           </button>
-        </>
-      )}
+        )}
+
+        {driversList.length > 0 && !selectedDriver && (
+          <>
+            <h3>Select Ambulance</h3>
+
+            {driversList.map((d) => (
+              <div
+                key={d.id}
+                className="driver-card"
+                onClick={() => selectDriver(d)}
+              >
+                <div>
+                  <strong>🚑 {d.driver}</strong><br />
+                  ⭐ {d.rating}
+                </div>
+                <div>⏱ {d.eta} min</div>
+              </div>
+            ))}
+          </>
+        )}
+
+        {selectedDriver && (
+          <>
+            <h3>🚑 On the way</h3>
+
+            <div className="driver-card">
+              <div>
+                <strong>{selectedDriver.driver}</strong><br />
+                ⭐ {selectedDriver.rating}
+              </div>
+              <div>⏱ {selectedDriver.eta} min</div>
+            </div>
+
+            <button
+              className="primary-btn"
+              onClick={() => window.location.reload()}
+            >
+              Cancel Request
+            </button>
+          </>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 }
